@@ -11,9 +11,11 @@ class Pipes:
         self.pipes = []
 
 
-    def update(self):
+    def update(self, dx=0):
         for pipe in self.pipes:
-            pipe.update()
+            pipe.update(dx)
+            if pipe.rect.midright < 0:
+                del self.pipes[pipes.index(pipe)]
 
 
     def draw(self, surface):
@@ -27,5 +29,5 @@ class Pipes:
         self.pipes.append(Pipe(pos, size))
 
 
-    def old(self):
-        pass
+    def collision(self, rect):
+        return rect.collidelist(pipe.rect for pipe in self.pipes)

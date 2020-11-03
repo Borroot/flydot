@@ -1,5 +1,6 @@
 from player import Player
 from pipes import Pipes
+from constants import *
 
 
 class State:
@@ -9,9 +10,9 @@ class State:
         self.pipes = Pipes()
 
 
-    def update(self):
+    def update(self, dirr):
+        self.player.update(dirr, self.pipes)
         self.pipes.update()
-        self.player.update()
 
 
     def draw(self, surface):

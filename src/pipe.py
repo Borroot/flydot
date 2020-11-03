@@ -8,8 +8,8 @@ class Pipe:
         self.rect = self.surface.get_rect(topleft=pos)
 
 
-    def update(self):
-        self.rect.centerx -= 4
+    def update(self, dx):
+        self.rect.centerx += dx
 
 
     def draw(self, surface):

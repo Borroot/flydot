@@ -1,27 +1,26 @@
 from pygame.locals import *
 import pygame
-import sys
+import sys,time
 
-
-SPAWNPIPE = pygame.USEREVENT
+from constants import *
 
 
 def event_handler(screen, state):
     for event in pygame.event.get():
         if event.type == QUIT:
             event_quit()
-        if event.type == SPAWNPIPE:
-            event_spawnpipe(state)
 
+    pressed = pygame.key.get_pressed()
+    if   pressed[K_SPACE]:
+        state.update(MOVE_U)
+    elif pressed[K_LEFT]:
+        state.update(MOVE_L)
+    elif pressed[K_RIGHT]:
+        state.update(MOVE_R)
 
-def event_init():
-    pygame.time.set_timer(SPAWNPIPE, 1500)
+    state.update(MOVE_D)
 
 
 def event_quit():
     pygame.quit()
     sys.exit()
-
-
-def event_spawnpipe(state):
-    state.pipes.new()
