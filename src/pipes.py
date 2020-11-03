@@ -9,12 +9,13 @@ class Pipes:
 
     def __init__(self):
         self.pipes = []
+        self.pipes.append(Pipe((0, SIZE_GAME[1] - 100), (SIZE_GAME[0] - 300, 100)))
 
 
     def update(self, dx=0):
         for pipe in self.pipes:
             pipe.update(dx)
-            if pipe.rect.midright < 0:
+            if pipe.rect.midright[0] < 0:
                 del self.pipes[pipes.index(pipe)]
 
 
@@ -29,5 +30,7 @@ class Pipes:
         self.pipes.append(Pipe(pos, size))
 
 
+    # NOTE This function only works proberly if there can be _at most_ one
+    # collision at a time between the player and one of the pipes.
     def collision(self, rect):
-        return rect.collidelist(pipe.rect for pipe in self.pipes)
+        return rect.collidelist([pipe.rect for pipe in self.pipes])

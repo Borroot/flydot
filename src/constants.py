@@ -3,7 +3,7 @@ SIZE_GAME = SIZE_MAIN
 
 FPS = 60
 
-MOVE_D = 1  # down
-MOVE_U = 2  # up
-MOVE_L = 3  # left
-MOVE_R = 4  # right
+MOVE_R =  1  # right
+MOVE_L = -1  # left
+MOVE_U =  2  # up
+MOVE_D =  3  # down
