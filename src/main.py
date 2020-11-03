@@ -1,0 +1,22 @@
+from constants import *
+from drawer import *
+from events import *
+from state import State
+
+
+def main():
+    screen = draw_init()
+    state = State()
+
+    event_init()
+    clock = pygame.time.Clock()
+
+    while True:
+        event_handler(screen, state)
+        state.update()
+        draw_all(screen, clock, state)
+        clock.tick(FPS)
+
+
+if __name__ == '__main__':
+    main()
