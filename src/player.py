@@ -56,8 +56,6 @@ class Player:
             sign = 0 if self.vel[0] == 0 else -1 if self.vel[0] > 0 else 1
             self.vel = (self.vel[0] + sign * Player.DECX, self.vel[1])
 
-        # TODO: check if you are rolling off
-
 
     def bumb_ground(self, dirr, pipe):
         self.inair = False
@@ -75,6 +73,16 @@ class Player:
             pass  # TODO: do stuff if bumb into side of pipe
 
 
+    def check_bumb_rolloff(self, dirr, pipes):
+        if self.inair and (index := pipes.collision(self.rect)) != -1:  # bumb
+            self.bumb(dirr, pipes.pipes[index])
+        if not self.inair:  # roll off
+            if self.ontop.rect.midleft[0]  > self.rect.midright[0]:
+                self.inair = True
+            if self.ontop.rect.midright[0] < self.rect.midleft[0]:
+                self.inair = True
+
+
     def move(self, dirr, pipes):
         if not self.inair:
             self.roll(dirr, pipes)
@@ -83,6 +91,4 @@ class Player:
 
         self.pos = add(self.pos, self.vel)
         self.rect.center = self.pos
-
-        if self.inair and (index := pipes.collision(self.rect)) != -1:
-            self.bumb(dirr, pipes.pipes[index])
+        check_bumb_rolloff(dirr, pipes)
