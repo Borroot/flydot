@@ -9,7 +9,11 @@ class Pipes:
 
     def __init__(self):
         self.pipes = []
-        self.pipes.append(Pipe((0, SIZE_GAME[1] - 100), (SIZE_GAME[0] - 300, 100)))
+        self.pipes.append(Pipe((0, SIZE_GAME[1] - 100), (300, 100)))
+        self.pipes.append(Pipe((0, 0), (50, SIZE_GAME[1])))
+        self.pipes.append(Pipe((600, SIZE_GAME[1] - 200), (300, 100)))
+        self.pipes.append(Pipe((1000, SIZE_GAME[1] - 350), (300, 200)))
+        self.pipes.append(Pipe((1000, SIZE_GAME[1] - 700), (300, 100)))
 
 
     def update(self, dx=0):
