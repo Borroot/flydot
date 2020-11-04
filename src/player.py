@@ -61,10 +61,28 @@ class Player:
         return all(rect.collidepoint(point) for point in points)
 
 
+    def bumb_sideways(self, dirr, pipe):
+        if dirr == MOVE_L:  # coming from the right
+            self.pos = (pipe.rect.right + Player.SIZE[0] // 2, self.pos[1])
+        if dirr == MOVE_R:  # coming from the left
+            self.pos = (pipe.rect.left  - Player.SIZE[0] // 2, self.pos[1])
+
+        self.vel = (0, self.vel[1])
+        self.rect.center = self.pos
+
+
+    def bumb_issideways(self, dirr, pipe):
+        lefts = [self.rect.bottomleft, self.rect.topleft]
+        left  = self.collidepointsall(pipe.rect, lefts)
+        rights = [self.rect.bottomright, self.rect.topright]
+        right = self.collidepointsall(pipe.rect, rights)
+        return None if not (left or right) else MOVE_L if left else MOVE_R
+
+
     def bumb_bottop(self, dirr, pipe):
-        if dirr == MOVE_U:
+        if dirr == MOVE_U:  # coming from below
             self.pos = (self.pos[0], pipe.rect.bottom + Player.SIZE[1] // 2)
-        if dirr == MOVE_D:
+        if dirr == MOVE_D:  # coming from above
             self.inair = False
             self.ontop = pipe
             self.pos = (self.pos[0], pipe.rect.top - Player.SIZE[1] // 2)
@@ -74,28 +92,22 @@ class Player:
 
 
     def bumb_isbottop(self, dirr, pipe):
-        bot = self.collidepointsall(pipe.rect, [self.rect.bottomleft, self.rect.bottomright])
-        top = self.collidepointsall(pipe.rect, [self.rect.topleft, self.rect.topright])
+        bots = [self.rect.bottomleft, self.rect.bottomright]
+        bot = self.collidepointsall(pipe.rect, bots)
+        tops = [self.rect.topleft, self.rect.topright]
+        top = self.collidepointsall(pipe.rect, tops)
         return None if not (bot or top) else MOVE_D if bot else MOVE_U
 
 
-    def bumb_sideways(self, dirr, pipe):
-        if dirr == MOVE_L:
-            self.pos = (pipe.rect.right + Player.SIZE[0] // 2, self.pos[1])
-        if dirr == MOVE_R:
-            self.pos = (pipe.rect.left - Player.SIZE[0] // 2, self.pos[1])
-
-        self.vel = (0, self.vel[1])
-        self.rect.center = self.pos
+    def bumb_angled(self, dirr, pipe):
+        topleft  = pipe.rect.collidepoint(self.rect.topleft)
+        topright = pipe.rect.collidepoint(self.rect.topright)
+        botleft  = pipe.rect.collidepoint(self.rect.bottomleft)
+        botright = pipe.rect.collidepoint(self.rect.bottomright)
+        print(topleft, botleft, topright, botright)
 
 
-    def bumb_issideways(self, dirr, pipe):
-        left  = self.collidepointsall(pipe.rect, [self.rect.bottomleft, self.rect.topleft])
-        right = self.collidepointsall(pipe.rect, [self.rect.bottomright, self.rect.topright])
-        return None if not (left or right) else MOVE_L if left else MOVE_R
-
-
-    # def bumb_resolve(self, dirr, pipe):
+    # def bumb_angled(self, dirr, pipe):
         # disx = 0
         # if self.rect.left < pipe.rect.right and self.rect.right > pipe.rect.right:
             # disx = pipe.rect.right - self.rect.left
@@ -105,7 +117,8 @@ class Player:
         # disy = 0
         # if self.rect.bottom > pipe.rect.top and self.rect.top > pipe.rect.top:
             # disy = pipe.rect.top - self.rect.bottom
-        # # TODO add case for disy on from below
+        # if self.rect.top < pipe.rect.bottom and self.rect.bottom > pipe.rect.bottom:
+            # disy = pipe.rect.bottom - self.rect.top
 
         # print(disx, disy)
         # if abs(disx) >= abs(disy):
@@ -121,10 +134,12 @@ class Player:
 
 
     def bumb(self, dirr, pipe):
-        if (dirr := self.bumb_isbottop(dirr, pipe)) is not None:
-            self.bumb_bottop(dirr, pipe)
         if (dirr := self.bumb_issideways(dirr, pipe)) is not None:
             self.bumb_sideways(dirr, pipe)
+        elif (dirr := self.bumb_isbottop(dirr, pipe)) is not None:
+            self.bumb_bottop(dirr, pipe)
+        else:
+            self.bumb_angled(dirr, pipe)
 
 
     def check_bumb_rolloff(self, dirr, pipes):
