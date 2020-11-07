@@ -10,6 +10,7 @@ def event_handler(screen, state):
         if event.type == QUIT:
             event_quit()
 
+    # TODO Use on press and on release in combo with bools instead.
     pressed = pygame.key.get_pressed()
     if   pressed[K_SPACE]:
         state.update(MOVE_U)
@@ -17,7 +18,6 @@ def event_handler(screen, state):
         state.update(MOVE_L)
     elif pressed[K_RIGHT]:
         state.update(MOVE_R)
-
     state.update(MOVE_D)
 
 

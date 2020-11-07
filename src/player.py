@@ -7,7 +7,7 @@ from vector import *
 
 class Player:
 
-    DECY = 0.3
+    DECY = 0.4
     VELY = -10
 
     ACCX = 1
