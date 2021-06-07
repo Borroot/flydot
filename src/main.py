@@ -1,3 +1,5 @@
+import threading
+
 from constants import *
 from drawer import *
 from events import *

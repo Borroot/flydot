@@ -9,8 +9,8 @@ def sub(vector1, vector2):
     return tuple(x - y for x, y in zip(vector1, vector2))
 
 
-def dist(p1, p2):
-    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+def dist(vector1, vector2):
+    return math.sqrt(sum((x - y)**2 for x, y in zip(vector1, vector2)))
 
 
 def limit(vector, magnitude):
